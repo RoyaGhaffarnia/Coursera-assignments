@@ -1,0 +1,38 @@
+#At first, we write the “makeCacheMatrix” function including x as the main matrix 
+makeCacheMatrix <- function(x = matrix()) {
+    inv <- NULL
+#Next, I define the “set” function to take y as a matrix
+    set <- function(y) {
+        x <<- y
+# We assign the NULL value for inv with a operator assignment (<<-) to clear the value of inv that had been cached by a before execution of cacheSolve()
+        inv <<- NULL
+    }
+#get function has been used to retrieve x function
+    get <- function() x
+#set/get function for inverse of inv
+    setInverse <- function(inverse) inv <<- inverse
+    getInverse <- function() inv
+#In order to subset and accessing the function by $ in the following steps, we need to assign all of the created functions to the elements of a list. Hence, we named the list elements as follows:
+    list(set = set,
+         get = get,
+         setInverse = setInverse,
+         getInverse = getInverse)
+}
+
+
+#cacheSolve is used in order to retrieve the inverse of the cache.
+
+cacheSolve <- function(x, ...) {
+
+  # Return a matrix which is the inverse of 'x'
+    inv <- x$getInverse()
+    if (!is.null(inv)) {
+        message("getting cached data")
+        return(inv)
+    }
+    matx <- x$get()
+    inv <- solve(matx, ...)
+    x$setInverse(inv)
+    inv
+}
+
